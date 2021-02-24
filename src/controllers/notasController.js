@@ -7,21 +7,20 @@ module.exports = {
             autores: '23ARED'
         })
     },
-    listado: function(req, res) {
-        db.Nota.findAll()
-        .then(function(notas) {
-            if(notas.length != 0) {
-                return res.status(200).json({
-                    cantidad: notas.length,
-                    notas: notas
-                })                
-            } else {
-                return res.json()
-            }
-        })
-        .catch(function(error) {
-            return res.json(error)
-        })
+    listado: async function(req, res) {
+        let notas = [];
+
+        try {
+            notas = await db.Nota.findAll();
+        }catch(e) {
+            return res.send(e);
+        }
+        if (notas) {
+            return res.status(200).json({
+                cantidad: notas.length,
+                notas: notas
+            })                
+        }
     },
     create: function(req, res) {
         db.Nota.create({
