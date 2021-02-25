@@ -16,7 +16,6 @@ const Main = () => {
         </section>
 
         <section className="list">
-        <p>La cantidad de notas son: {notes.count}</p>
             {
                 notes.notes.map((note, i) => {
                     return ( 
