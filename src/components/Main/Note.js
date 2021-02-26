@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Form from './Form';
 
 const Note = ({title, description}) => {
  return (
@@ -8,9 +9,9 @@ const Note = ({title, description}) => {
     <p>{description}</p>
     <div className="edit">
         <a href="/"><i className="far fa-edit"></i></a>
-        <form className="deleteForm" action="">
-            <button type="submit"><i className="far fa-trash-alt"></i></button>
-        </form>
+            <Form action="" method="post">
+                 <button type="submit"><i className="far fa-trash-alt"></i></button>
+            </Form>
     </div>
 </div>
  )

@@ -1,36 +1,77 @@
-import React from 'react'
+import React, {Component} from 'react'
 import Note from './Note';
 import {notes} from '../helpers';
+import Form from './Form';
 
-const Main = () => {
+class Main extends Component {
+    constructor () {
+        super();
+        this.state = {
+            notes: [],
+            errors: true,
+            title: "",
+            text: ""
+        }
+    }
 
-    return (
-        <main>
+    handleChange (e) {
+        if (e.target.value.length !== 0) {
+            this.setState({ 
+                errors: false,
+                [e.target.name]: e.target.value
+            })
+            return;
+        }
+        this.setState({ errors: true })
+    }
 
-        <section className="new">
-            <form id="createForm" action="/movies/create" method="post">
-                <input type="text" name="title" placeholder="Título" />
-                <textarea name="text" id="text" cols="30" placeholder="Añade una nota..."></textarea>
-                <button type="submit">Crear</button>
-            </form>
-        </section>
+    handleSubmit (e) {
+        e.preventDefault();
+        console.log('entro en el prevent');
+    }
 
-        <section className="list">
-            {
-                notes.notes.map((note, i) => {
-                    return ( 
-                        <Note
-                            key={i}
-                            title={note.title}
-                            description={note.description}
+   render () {
+       return (
+           <main>
+               <section className="new">
+                   <Form
+                       action="/api/create"
+                       method="post"
+                       evento={this.handleSubmit}
+                   >
+                       <input 
+                            type="text" 
+                            name="title" 
+                            placeholder="Título"
+                            onChange={(e) => this.handleChange(e)}
                         />
-                    )
-                })
-            }
-        </section>
+                       <textarea 
+                            name="text" 
+                            id="text" 
+                            cols="30" 
+                            placeholder="Añade una nota..."
+                            onChange={(e) => this.handleChange(e)}
+                        ></textarea>
+                       <button type="submit">Crear</button>
+                   </Form>
 
-    </main>
-    )
+               </section>
+               <section className="list">
+                   {
+                       notes.notes.map((note, i) => {
+                           return (
+                               <Note
+                                   key={i}
+                                   title={note.title}
+                                   description={note.description}
+                               />
+                           )
+                       })
+                   }
+               </section>
+           </main>
+       )
+   }
 }
 
 export default Main;
