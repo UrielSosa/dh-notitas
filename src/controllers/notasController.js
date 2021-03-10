@@ -1,26 +1,29 @@
 let db = require('../database/models/index');
 
 module.exports = {
-    prueba: function(req, res) {
-        return res.json({
-            nombreDeLaApp: 'Notitas',
-            autores: '23ARED'
-        })
-    },
     listado: async function(req, res) {
-        let notas = [];
-
+        let notas;
         try {
             notas = await db.Nota.findAll();
-        }catch(e) {
-            return res.send(e);
+        }catch (error) {
+            res.status(404).json({
+                error,
+                message: "No pudimos traer las notas"
+            })
         }
-        if (notas) {
-            return res.status(200).json({
-                cantidad: notas.length,
-                notas: notas
-            })                
+        if (!notas) {
+            res.status(404).json({
+                error,
+                message: "No pudimos traer las notas"
+            })
         }
+        
+
+        return res.status(200).json({
+            total: notas.length,
+            data: notas,
+        });
+        
     },
     create: function(req, res) {
         db.Nota.create({

@@ -11,6 +11,6 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/api', notasRouter);
 
-app.listen(3001, function() {
+app.listen(3000, function() {
     console.log("Servidor corriendo en el puerto 3000")
 })

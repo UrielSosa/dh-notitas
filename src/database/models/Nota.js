@@ -16,7 +16,7 @@ module.exports = function(sequelize, dataTypes) {
     }
     let config = {
         tableName: 'notas',
-        timestamps: true,
+        timestamps: false,
         underscored: true,
         paranoid: true
     }
