@@ -17,7 +17,6 @@ module.exports = {
                 message: "No pudimos traer las notas"
             })
         }
-        
 
         return res.status(200).json({
             total: notas.length,
