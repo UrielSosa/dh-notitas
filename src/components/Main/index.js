@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import Note from './Note';
-import {notes} from '../helpers';
 import Form from './Form';
 
 class Main extends Component {
@@ -14,6 +13,21 @@ class Main extends Component {
         }
     }
 
+    fetchCall (endpoint, call, config = null) {
+        fetch(endpoint, config)
+            .then(res => res.json())
+            .then(data => call(data))
+    }
+
+    componentDidMount() {
+        let url = 'http://localhost:3001/api/all';
+        let call = (data) => {
+            this.setState({notes: data.data})
+        }
+        
+        this.fetchCall(url, call);
+    }
+
     handleChange (e) {
         if (e.target.value.length !== 0) {
             this.setState({ 
@@ -25,12 +39,32 @@ class Main extends Component {
         this.setState({ errors: true })
     }
 
-    handleSubmit (e) {
+    handleSubmit = (e) => {
         e.preventDefault();
-        console.log('entro en el prevent');
+        let url = 'http://localhost:3001/api/create';
+        let call = (data) => {
+            this.setState({ title: "", text:"" })
+        }
+        let data = {
+            titulo: this.state.title,
+            texto:this.state.text
+        }
+        let config = {
+            method: 'POST',
+            body: JSON.stringify(data), 
+            headers:{
+              'Content-Type': 'application/json'
+            }
+        }
+          console.log(data);
+
+        if (!this.state.errors) {
+            this.fetchCall(url, call, config);
+        }
     }
 
    render () {
+       let {notes} = this.state;
        return (
            <main>
                <section className="new">
@@ -44,6 +78,7 @@ class Main extends Component {
                             name="title" 
                             placeholder="Título"
                             onChange={(e) => this.handleChange(e)}
+                            value={this.state.title}
                         />
                        <textarea 
                             name="text" 
@@ -51,6 +86,7 @@ class Main extends Component {
                             cols="30" 
                             placeholder="Añade una nota..."
                             onChange={(e) => this.handleChange(e)}
+                            value={this.state.text}
                         ></textarea>
                        <button type="submit">Crear</button>
                    </Form>
@@ -58,12 +94,12 @@ class Main extends Component {
                </section>
                <section className="list">
                    {
-                       notes.notes.map((note, i) => {
+                       notes.map((note) => {
                            return (
                                <Note
-                                   key={i}
-                                   title={note.title}
-                                   description={note.description}
+                                   key={note.id}
+                                   title={note.titulo}
+                                   description={note.texto}
                                />
                            )
                        })
